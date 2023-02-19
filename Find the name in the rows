@@ -1,0 +1,77 @@
+' Imagine that you have 2 tables with names and do you want to check if the name that you input is in the tables. 
+' The output that you need is which table is the name, and if not, you want to add the name in the first table! 
+
+
+Sub LastRow()
+'
+' simple funciton to find the next empty row
+'
+    Range("B10").Select
+    ActiveWindow.LargeScroll Down:=1
+    Selection.End(xlDown).Select
+    ActiveCell.Offset(1, 0).Activate   
+
+End Sub
+
+
+Sub findName()
+
+Name = InputBox("Enter your name:")
+Dim compid As Range
+Set compid = Range("B:B").Find(what:=Name, LookIn:=xlValues, lookat:=xlWhole)
+Dim table2 As Range
+Set table2 = Range("E:E").Find(what:=Name, LookIn:=xlValues, lookat:=xlWhole)
+
+
+If Not compid Is Nothing And Not table2 Is Nothing Then
+MsgBox ("Name is in Table 1 and Name 2!")
+ElseIf Not compid Is Nothing Then
+MsgBox ("Name is in Table 1!")
+ElseIf Not table2 Is Nothing Then
+MsgBox ("Name is in Table 2!")
+Else
+MsgBox ("Name didn't found.")
+Call LastRow
+ActiveCell.FormulaR1C1 = Name
+
+End If
+
+Call Format
+
+End Sub
+
+Sub Format()
+'
+' Format the table
+
+'
+    Range("B10").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    With Selection
+        .HorizontalAlignment = xlCenter
+        .VerticalAlignment = xlBottom
+    End With
+
+    Range("B10").Select
+    ActiveWindow.LargeScroll Down:=1
+    Selection.End(xlDown).Select
+    cellActive = ActiveCell.Offset(1, 0).Activate
+    
+    Range("B29").Select
+    Selection.Copy
+
+    Range("B10").Select
+    ActiveWindow.LargeScroll Down:=1
+    Selection.End(xlDown).Select
+    cellActive = ActiveCell.Offset(0, 0).Activate
+
+
+    Selection.PasteSpecial Paste:=xlPasteFormats, Operation:=xlNone, _
+    SkipBlanks:=False, Transpose:=False
+    Application.CutCopyMode = False
+    
+
+End Sub
+
+
+
